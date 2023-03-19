@@ -79,7 +79,7 @@ impl ConditionallySelectable for G2Affine {
 
 impl Eq for G2Affine {}
 impl PartialEq for G2Affine {
-    #[inline]
+    #[inline(never)]
     fn eq(&self, other: &Self) -> bool {
         bool::from(self.ct_eq(other))
     }
@@ -88,7 +88,7 @@ impl PartialEq for G2Affine {
 impl<'a> Neg for &'a G2Affine {
     type Output = G2Affine;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> G2Affine {
         G2Affine {
             x: self.x,
@@ -101,7 +101,7 @@ impl<'a> Neg for &'a G2Affine {
 impl Neg for G2Affine {
     type Output = G2Affine;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> G2Affine {
         -&self
     }
@@ -110,7 +110,7 @@ impl Neg for G2Affine {
 impl<'a, 'b> Add<&'b G2Projective> for &'a G2Affine {
     type Output = G2Projective;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b G2Projective) -> G2Projective {
         rhs.add_mixed(self)
     }
@@ -119,7 +119,7 @@ impl<'a, 'b> Add<&'b G2Projective> for &'a G2Affine {
 impl<'a, 'b> Add<&'b G2Affine> for &'a G2Projective {
     type Output = G2Projective;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b G2Affine) -> G2Projective {
         self.add_mixed(rhs)
     }
@@ -128,7 +128,7 @@ impl<'a, 'b> Add<&'b G2Affine> for &'a G2Projective {
 impl<'a, 'b> Sub<&'b G2Projective> for &'a G2Affine {
     type Output = G2Projective;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b G2Projective) -> G2Projective {
         self + (-rhs)
     }
@@ -137,7 +137,7 @@ impl<'a, 'b> Sub<&'b G2Projective> for &'a G2Affine {
 impl<'a, 'b> Sub<&'b G2Affine> for &'a G2Projective {
     type Output = G2Projective;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b G2Affine) -> G2Projective {
         self + (-rhs)
     }
@@ -446,7 +446,7 @@ impl G2Affine {
     }
 
     /// Returns true if this element is the identity (the point at infinity).
-    #[inline]
+    #[inline(never)]
     pub fn is_identity(&self) -> Choice {
         self.infinity
     }
@@ -531,7 +531,7 @@ impl ConditionallySelectable for G2Projective {
 
 impl Eq for G2Projective {}
 impl PartialEq for G2Projective {
-    #[inline]
+    #[inline(never)]
     fn eq(&self, other: &Self) -> bool {
         bool::from(self.ct_eq(other))
     }
@@ -540,7 +540,7 @@ impl PartialEq for G2Projective {
 impl<'a> Neg for &'a G2Projective {
     type Output = G2Projective;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> G2Projective {
         G2Projective {
             x: self.x,
@@ -553,7 +553,7 @@ impl<'a> Neg for &'a G2Projective {
 impl Neg for G2Projective {
     type Output = G2Projective;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> G2Projective {
         -&self
     }
@@ -562,7 +562,7 @@ impl Neg for G2Projective {
 impl<'a, 'b> Add<&'b G2Projective> for &'a G2Projective {
     type Output = G2Projective;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b G2Projective) -> G2Projective {
         self.add(rhs)
     }
@@ -571,7 +571,7 @@ impl<'a, 'b> Add<&'b G2Projective> for &'a G2Projective {
 impl<'a, 'b> Sub<&'b G2Projective> for &'a G2Projective {
     type Output = G2Projective;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b G2Projective) -> G2Projective {
         self + (-rhs)
     }
@@ -1008,7 +1008,7 @@ impl G2Projective {
     }
 
     /// Returns true if this element is the identity (the point at infinity).
-    #[inline]
+    #[inline(never)]
     pub fn is_identity(&self) -> Choice {
         self.z.is_zero()
     }

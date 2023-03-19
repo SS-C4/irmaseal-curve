@@ -48,7 +48,7 @@ impl PartialEq for Fp12 {
 
 impl Copy for Fp12 {}
 impl Clone for Fp12 {
-    #[inline]
+    #[inline(never)]
     fn clone(&self) -> Self {
         *self
     }
@@ -67,7 +67,7 @@ impl fmt::Debug for Fp12 {
 }
 
 impl ConditionallySelectable for Fp12 {
-    #[inline(always)]
+    #[inline(never)]
     fn conditional_select(a: &Self, b: &Self, choice: Choice) -> Self {
         Fp12 {
             c0: Fp6::conditional_select(&a.c0, &b.c0, choice),
@@ -77,14 +77,14 @@ impl ConditionallySelectable for Fp12 {
 }
 
 impl ConstantTimeEq for Fp12 {
-    #[inline(always)]
+    #[inline(never)]
     fn ct_eq(&self, other: &Self) -> Choice {
         self.c0.ct_eq(&other.c0) & self.c1.ct_eq(&other.c1)
     }
 }
 
 impl Fp12 {
-    #[inline]
+    #[inline(never)]
     pub fn zero() -> Self {
         Fp12 {
             c0: Fp6::zero(),
@@ -92,7 +92,7 @@ impl Fp12 {
         }
     }
 
-    #[inline]
+    #[inline(never)]
     pub fn one() -> Self {
         Fp12 {
             c0: Fp6::one(),
@@ -114,12 +114,12 @@ impl Fp12 {
         Fp12 { c0, c1 }
     }
 
-    #[inline(always)]
+    #[inline(never)]
     pub fn is_zero(&self) -> Choice {
         self.c0.is_zero() & self.c1.is_zero()
     }
 
-    #[inline(always)]
+    #[inline(never)]
     pub fn conjugate(&self) -> Self {
         Fp12 {
             c0: self.c0,
@@ -128,7 +128,7 @@ impl Fp12 {
     }
 
     /// Raises this element to p.
-    #[inline(always)]
+    #[inline(never)]
     pub fn frobenius_map(&self) -> Self {
         let c0 = self.c0.frobenius_map();
         let c1 = self.c1.frobenius_map();
@@ -157,7 +157,7 @@ impl Fp12 {
         Fp12 { c0, c1 }
     }
 
-    #[inline]
+    #[inline(never)]
     pub fn square(&self) -> Self {
         let ab = self.c0 * self.c1;
         let c0c1 = self.c0 + self.c1;
@@ -249,7 +249,7 @@ impl Fp12 {
 impl<'a, 'b> Mul<&'b Fp12> for &'a Fp12 {
     type Output = Fp12;
 
-    #[inline]
+    #[inline(never)]
     fn mul(self, other: &'b Fp12) -> Self::Output {
         let aa = self.c0 * other.c0;
         let bb = self.c1 * other.c1;
@@ -268,7 +268,7 @@ impl<'a, 'b> Mul<&'b Fp12> for &'a Fp12 {
 impl<'a, 'b> Add<&'b Fp12> for &'a Fp12 {
     type Output = Fp12;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b Fp12) -> Self::Output {
         Fp12 {
             c0: self.c0 + rhs.c0,
@@ -280,7 +280,7 @@ impl<'a, 'b> Add<&'b Fp12> for &'a Fp12 {
 impl<'a> Neg for &'a Fp12 {
     type Output = Fp12;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Self::Output {
         Fp12 {
             c0: -self.c0,
@@ -292,7 +292,7 @@ impl<'a> Neg for &'a Fp12 {
 impl Neg for Fp12 {
     type Output = Fp12;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Self::Output {
         -&self
     }
@@ -301,7 +301,7 @@ impl Neg for Fp12 {
 impl<'a, 'b> Sub<&'b Fp12> for &'a Fp12 {
     type Output = Fp12;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b Fp12) -> Self::Output {
         Fp12 {
             c0: self.c0 - rhs.c0,

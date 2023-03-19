@@ -45,7 +45,7 @@ impl ConstantTimeEq for Fp {
 
 impl Eq for Fp {}
 impl PartialEq for Fp {
-    #[inline]
+    #[inline(never)]
     fn eq(&self, other: &Self) -> bool {
         self.ct_eq(other).unwrap_u8() == 1
     }
@@ -100,7 +100,7 @@ const R2: Fp = Fp([
 impl<'a> Neg for &'a Fp {
     type Output = Fp;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Fp {
         self.neg()
     }
@@ -109,7 +109,7 @@ impl<'a> Neg for &'a Fp {
 impl Neg for Fp {
     type Output = Fp;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Fp {
         -&self
     }
@@ -118,7 +118,7 @@ impl Neg for Fp {
 impl<'a, 'b> Sub<&'b Fp> for &'a Fp {
     type Output = Fp;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b Fp) -> Fp {
         self.sub(rhs)
     }
@@ -127,7 +127,7 @@ impl<'a, 'b> Sub<&'b Fp> for &'a Fp {
 impl<'a, 'b> Add<&'b Fp> for &'a Fp {
     type Output = Fp;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b Fp) -> Fp {
         self.add(rhs)
     }
@@ -136,7 +136,7 @@ impl<'a, 'b> Add<&'b Fp> for &'a Fp {
 impl<'a, 'b> Mul<&'b Fp> for &'a Fp {
     type Output = Fp;
 
-    #[inline]
+    #[inline(never)]
     fn mul(self, rhs: &'b Fp) -> Fp {
         self.mul(rhs)
     }
@@ -147,13 +147,13 @@ impl_binops_multiplicative!(Fp, Fp);
 
 impl Fp {
     /// Returns zero, the additive identity.
-    #[inline]
+    #[inline(never)]
     pub const fn zero() -> Fp {
         Fp([0, 0, 0, 0, 0, 0])
     }
 
     /// Returns one, the multiplicative identity.
-    #[inline]
+    #[inline(never)]
     pub const fn one() -> Fp {
         R
     }
@@ -266,7 +266,7 @@ impl Fp {
         res
     }
 
-    #[inline]
+    #[inline(never)]
     pub fn sqrt(&self) -> CtOption<Self> {
         // We use Shank's method, as p = 3 (mod 4). This means
         // we only need to exponentiate by (p+1)/4. This only
@@ -285,7 +285,7 @@ impl Fp {
         CtOption::new(sqrt, sqrt.square().ct_eq(self))
     }
 
-    #[inline]
+    #[inline(never)]
     /// Computes the multiplicative inverse of this field
     /// element, returning None in the case that this element
     /// is zero.
@@ -303,7 +303,7 @@ impl Fp {
         CtOption::new(t, !self.is_zero())
     }
 
-    #[inline]
+    #[inline(never)]
     const fn subtract_p(&self) -> Fp {
         let (r0, borrow) = sbb(self.0[0], MODULUS[0], 0);
         let (r1, borrow) = sbb(self.0[1], MODULUS[1], borrow);
@@ -324,7 +324,7 @@ impl Fp {
         Fp([r0, r1, r2, r3, r4, r5])
     }
 
-    #[inline]
+    #[inline(never)]
     pub const fn add(&self, rhs: &Fp) -> Fp {
         let (d0, carry) = adc(self.0[0], rhs.0[0], 0);
         let (d1, carry) = adc(self.0[1], rhs.0[1], carry);
@@ -338,7 +338,7 @@ impl Fp {
         (&Fp([d0, d1, d2, d3, d4, d5])).subtract_p()
     }
 
-    #[inline]
+    #[inline(never)]
     pub const fn neg(&self) -> Fp {
         let (d0, borrow) = sbb(MODULUS[0], self.0[0], 0);
         let (d1, borrow) = sbb(MODULUS[1], self.0[1], borrow);
@@ -363,12 +363,12 @@ impl Fp {
         ])
     }
 
-    #[inline]
+    #[inline(never)]
     pub const fn sub(&self, rhs: &Fp) -> Fp {
         (&rhs.neg()).add(self)
     }
 
-    #[inline(always)]
+    #[inline(never)]
     const fn montgomery_reduce(
         t0: u64,
         t1: u64,
@@ -446,7 +446,7 @@ impl Fp {
         (&Fp([r6, r7, r8, r9, r10, r11])).subtract_p()
     }
 
-    #[inline]
+    #[inline(never)]
     pub const fn mul(&self, rhs: &Fp) -> Fp {
         let (t0, carry) = mac(0, self.0[0], rhs.0[0], 0);
         let (t1, carry) = mac(0, self.0[0], rhs.0[1], carry);
@@ -494,7 +494,7 @@ impl Fp {
     }
 
     /// Squares this element.
-    #[inline]
+    #[inline(never)]
     pub const fn square(&self) -> Self {
         let (t1, carry) = mac(0, self.0[0], self.0[1], 0);
         let (t2, carry) = mac(0, self.0[0], self.0[2], carry);

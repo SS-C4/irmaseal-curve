@@ -44,7 +44,7 @@ impl ConstantTimeEq for Scalar {
 }
 
 impl PartialEq for Scalar {
-    #[inline]
+    #[inline(never)]
     fn eq(&self, other: &Self) -> bool {
         self.ct_eq(other).unwrap_u8() == 1
     }
@@ -73,7 +73,7 @@ pub(crate) const MODULUS: Scalar = Scalar([
 impl<'a> Neg for &'a Scalar {
     type Output = Scalar;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Scalar {
         self.neg()
     }
@@ -82,7 +82,7 @@ impl<'a> Neg for &'a Scalar {
 impl Neg for Scalar {
     type Output = Scalar;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Scalar {
         -&self
     }
@@ -91,7 +91,7 @@ impl Neg for Scalar {
 impl<'a, 'b> Sub<&'b Scalar> for &'a Scalar {
     type Output = Scalar;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b Scalar) -> Scalar {
         self.sub(rhs)
     }
@@ -100,7 +100,7 @@ impl<'a, 'b> Sub<&'b Scalar> for &'a Scalar {
 impl<'a, 'b> Add<&'b Scalar> for &'a Scalar {
     type Output = Scalar;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b Scalar) -> Scalar {
         self.add(rhs)
     }
@@ -109,7 +109,7 @@ impl<'a, 'b> Add<&'b Scalar> for &'a Scalar {
 impl<'a, 'b> Mul<&'b Scalar> for &'a Scalar {
     type Output = Scalar;
 
-    #[inline]
+    #[inline(never)]
     fn mul(self, rhs: &'b Scalar) -> Scalar {
         self.mul(rhs)
     }
@@ -162,7 +162,7 @@ const ROOT_OF_UNITY: Scalar = Scalar([
 ]);
 
 impl Default for Scalar {
-    #[inline]
+    #[inline(never)]
     fn default() -> Self {
         Self::zero()
     }
@@ -170,19 +170,19 @@ impl Default for Scalar {
 
 impl Scalar {
     /// Returns zero, the additive identity.
-    #[inline]
+    #[inline(never)]
     pub const fn zero() -> Scalar {
         Scalar([0, 0, 0, 0])
     }
 
     /// Returns one, the multiplicative identity.
-    #[inline]
+    #[inline(never)]
     pub const fn one() -> Scalar {
         R
     }
 
     /// Doubles this field element.
-    #[inline]
+    #[inline(never)]
     pub const fn double(&self) -> Scalar {
         // TODO: This can be achieved more efficiently with a bitshift.
         self.add(self)
@@ -274,7 +274,7 @@ impl Scalar {
     }
 
     /// Squares this element.
-    #[inline]
+    #[inline(never)]
     pub const fn square(&self) -> Scalar {
         let (r1, carry) = mac(0, self.0[0], self.0[1], 0);
         let (r2, carry) = mac(0, self.0[0], self.0[2], carry);
@@ -392,7 +392,7 @@ impl Scalar {
     /// Computes the multiplicative inverse of this element,
     /// failing if the element is zero.
     pub fn invert(&self) -> CtOption<Self> {
-        #[inline(always)]
+        #[inline(never)]
         fn square_assign_multi(n: &mut Scalar, num_times: usize) {
             for _ in 0..num_times {
                 *n = n.square();
@@ -488,7 +488,7 @@ impl Scalar {
         CtOption::new(t0, !self.ct_eq(&Self::zero()))
     }
 
-    #[inline(always)]
+    #[inline(never)]
     const fn montgomery_reduce(
         r0: u64,
         r1: u64,
@@ -536,7 +536,7 @@ impl Scalar {
     }
 
     /// Multiplies `rhs` by `self`, returning the result.
-    #[inline]
+    #[inline(never)]
     pub const fn mul(&self, rhs: &Self) -> Self {
         // Schoolbook multiplication
 
@@ -564,7 +564,7 @@ impl Scalar {
     }
 
     /// Subtracts `rhs` from `self`, returning the result.
-    #[inline]
+    #[inline(never)]
     pub const fn sub(&self, rhs: &Self) -> Self {
         let (d0, borrow) = sbb(self.0[0], rhs.0[0], 0);
         let (d1, borrow) = sbb(self.0[1], rhs.0[1], borrow);
@@ -582,7 +582,7 @@ impl Scalar {
     }
 
     /// Adds `rhs` to `self`, returning the result.
-    #[inline]
+    #[inline(never)]
     pub const fn add(&self, rhs: &Self) -> Self {
         let (d0, carry) = adc(self.0[0], rhs.0[0], 0);
         let (d1, carry) = adc(self.0[1], rhs.0[1], carry);
@@ -595,7 +595,7 @@ impl Scalar {
     }
 
     /// Negates `self`.
-    #[inline]
+    #[inline(never)]
     pub const fn neg(&self) -> Self {
         // Subtract `self` from `MODULUS` to negate. Ignore the final
         // borrow because it cannot underflow; self is guaranteed to

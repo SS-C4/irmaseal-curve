@@ -40,7 +40,7 @@ impl PartialEq for Fp6 {
 
 impl Copy for Fp6 {}
 impl Clone for Fp6 {
-    #[inline]
+    #[inline(never)]
     fn clone(&self) -> Self {
         *self
     }
@@ -59,7 +59,7 @@ impl fmt::Debug for Fp6 {
 }
 
 impl ConditionallySelectable for Fp6 {
-    #[inline(always)]
+    #[inline(never)]
     fn conditional_select(a: &Self, b: &Self, choice: Choice) -> Self {
         Fp6 {
             c0: Fp2::conditional_select(&a.c0, &b.c0, choice),
@@ -70,14 +70,14 @@ impl ConditionallySelectable for Fp6 {
 }
 
 impl ConstantTimeEq for Fp6 {
-    #[inline(always)]
+    #[inline(never)]
     fn ct_eq(&self, other: &Self) -> Choice {
         self.c0.ct_eq(&other.c0) & self.c1.ct_eq(&other.c1) & self.c2.ct_eq(&other.c2)
     }
 }
 
 impl Fp6 {
-    #[inline]
+    #[inline(never)]
     pub fn zero() -> Self {
         Fp6 {
             c0: Fp2::zero(),
@@ -86,7 +86,7 @@ impl Fp6 {
         }
     }
 
-    #[inline]
+    #[inline(never)]
     pub fn one() -> Self {
         Fp6 {
             c0: Fp2::one(),
@@ -144,7 +144,7 @@ impl Fp6 {
 
     /// Returns whether or not this element is strictly lexicographically
     /// larger than its negation.
-    #[inline]
+    #[inline(never)]
     pub fn lexicographically_largest(&self) -> Choice {
         self.c2.lexicographically_largest()
             | (self.c2.is_zero() & self.c1.lexicographically_largest())
@@ -152,7 +152,7 @@ impl Fp6 {
     }
 
     /// Raises this element to p.
-    #[inline(always)]
+    #[inline(never)]
     pub fn frobenius_map(&self) -> Self {
         let c0 = self.c0.frobenius_map();
         let c1 = self.c1.frobenius_map();
@@ -189,12 +189,12 @@ impl Fp6 {
         Fp6 { c0, c1, c2 }
     }
 
-    #[inline(always)]
+    #[inline(never)]
     pub fn is_zero(&self) -> Choice {
         self.c0.is_zero() & self.c1.is_zero() & self.c2.is_zero()
     }
 
-    #[inline]
+    #[inline(never)]
     pub fn square(&self) -> Self {
         let s0 = self.c0.square();
         let ab = self.c0 * self.c1;
@@ -339,7 +339,7 @@ impl Fp6 {
         CtOption::new(a, c1 | c2)
     }
 
-    #[inline]
+    #[inline(never)]
     pub fn invert(&self) -> CtOption<Self> {
         let c0 = (self.c1 * self.c2).mul_by_nonresidue();
         let c0 = self.c0.square() - c0;
@@ -442,7 +442,7 @@ impl Fp6 {
 impl<'a, 'b> Mul<&'b Fp6> for &'a Fp6 {
     type Output = Fp6;
 
-    #[inline]
+    #[inline(never)]
     fn mul(self, other: &'b Fp6) -> Self::Output {
         let aa = self.c0 * other.c0;
         let bb = self.c1 * other.c1;
@@ -482,7 +482,7 @@ impl<'a, 'b> Mul<&'b Fp6> for &'a Fp6 {
 impl<'a, 'b> Add<&'b Fp6> for &'a Fp6 {
     type Output = Fp6;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b Fp6) -> Self::Output {
         Fp6 {
             c0: self.c0 + rhs.c0,
@@ -495,7 +495,7 @@ impl<'a, 'b> Add<&'b Fp6> for &'a Fp6 {
 impl<'a> Neg for &'a Fp6 {
     type Output = Fp6;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Self::Output {
         Fp6 {
             c0: -self.c0,
@@ -508,7 +508,7 @@ impl<'a> Neg for &'a Fp6 {
 impl Neg for Fp6 {
     type Output = Fp6;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Self::Output {
         -&self
     }
@@ -517,7 +517,7 @@ impl Neg for Fp6 {
 impl<'a, 'b> Sub<&'b Fp6> for &'a Fp6 {
     type Output = Fp6;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b Fp6) -> Self::Output {
         Fp6 {
             c0: self.c0 - rhs.c0,

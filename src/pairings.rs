@@ -161,7 +161,7 @@ impl MillerLoopResult {
 impl<'a, 'b> Add<&'b MillerLoopResult> for &'a MillerLoopResult {
     type Output = MillerLoopResult;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b MillerLoopResult) -> MillerLoopResult {
         MillerLoopResult(self.0 * rhs.0)
     }
@@ -197,7 +197,7 @@ impl Default for Gt {
 
 impl Eq for Gt {}
 impl PartialEq for Gt {
-    #[inline]
+    #[inline(never)]
     fn eq(&self, other: &Self) -> bool {
         bool::from(self.ct_eq(other))
     }
@@ -289,7 +289,7 @@ impl Gt {
 impl<'a> Neg for &'a Gt {
     type Output = Gt;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Gt {
         // The element is unitary, so we just conjugate.
         Gt(self.0.conjugate())
@@ -299,7 +299,7 @@ impl<'a> Neg for &'a Gt {
 impl Neg for Gt {
     type Output = Gt;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Gt {
         -&self
     }
@@ -308,7 +308,7 @@ impl Neg for Gt {
 impl<'a, 'b> Add<&'b Gt> for &'a Gt {
     type Output = Gt;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b Gt) -> Gt {
         Gt(self.0 * rhs.0)
     }
@@ -317,7 +317,7 @@ impl<'a, 'b> Add<&'b Gt> for &'a Gt {
 impl<'a, 'b> Sub<&'b Gt> for &'a Gt {
     type Output = Gt;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b Gt) -> Gt {
         self + (-rhs)
     }

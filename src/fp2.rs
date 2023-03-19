@@ -42,7 +42,7 @@ impl ConstantTimeEq for Fp2 {
 
 impl Eq for Fp2 {}
 impl PartialEq for Fp2 {
-    #[inline]
+    #[inline(never)]
     fn eq(&self, other: &Self) -> bool {
         self.ct_eq(other).unwrap_u8() == 1
     }
@@ -60,7 +60,7 @@ impl ConditionallySelectable for Fp2 {
 impl<'a> Neg for &'a Fp2 {
     type Output = Fp2;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Fp2 {
         self.neg()
     }
@@ -69,7 +69,7 @@ impl<'a> Neg for &'a Fp2 {
 impl Neg for Fp2 {
     type Output = Fp2;
 
-    #[inline]
+    #[inline(never)]
     fn neg(self) -> Fp2 {
         -&self
     }
@@ -78,7 +78,7 @@ impl Neg for Fp2 {
 impl<'a, 'b> Sub<&'b Fp2> for &'a Fp2 {
     type Output = Fp2;
 
-    #[inline]
+    #[inline(never)]
     fn sub(self, rhs: &'b Fp2) -> Fp2 {
         self.sub(rhs)
     }
@@ -87,7 +87,7 @@ impl<'a, 'b> Sub<&'b Fp2> for &'a Fp2 {
 impl<'a, 'b> Add<&'b Fp2> for &'a Fp2 {
     type Output = Fp2;
 
-    #[inline]
+    #[inline(never)]
     fn add(self, rhs: &'b Fp2) -> Fp2 {
         self.add(rhs)
     }
@@ -96,7 +96,7 @@ impl<'a, 'b> Add<&'b Fp2> for &'a Fp2 {
 impl<'a, 'b> Mul<&'b Fp2> for &'a Fp2 {
     type Output = Fp2;
 
-    #[inline]
+    #[inline(never)]
     fn mul(self, rhs: &'b Fp2) -> Fp2 {
         self.mul(rhs)
     }
@@ -106,7 +106,7 @@ impl_binops_additive!(Fp2, Fp2);
 impl_binops_multiplicative!(Fp2, Fp2);
 
 impl Fp2 {
-    #[inline]
+    #[inline(never)]
     pub const fn zero() -> Fp2 {
         Fp2 {
             c0: Fp::zero(),
@@ -114,7 +114,7 @@ impl Fp2 {
         }
     }
 
-    #[inline]
+    #[inline(never)]
     pub const fn one() -> Fp2 {
         Fp2 {
             c0: Fp::one(),
@@ -127,14 +127,14 @@ impl Fp2 {
     }
 
     /// Raises this element to p.
-    #[inline(always)]
+    #[inline(never)]
     pub fn frobenius_map(&self) -> Self {
         // This is always just a conjugation. If you're curious why, here's
         // an article about it: https://alicebob.cryptoland.net/the-frobenius-endomorphism-with-finite-fields/
         self.conjugate()
     }
 
-    #[inline(always)]
+    #[inline(never)]
     pub fn conjugate(&self) -> Self {
         Fp2 {
             c0: self.c0,
@@ -142,7 +142,7 @@ impl Fp2 {
         }
     }
 
-    #[inline(always)]
+    #[inline(never)]
     pub fn mul_by_nonresidue(&self) -> Fp2 {
         // Multiply a + bu by u + 1, getting
         // au + a + bu^2 + bu
@@ -157,7 +157,7 @@ impl Fp2 {
 
     /// Returns whether or not this element is strictly lexicographically
     /// larger than its negation.
-    #[inline]
+    #[inline(never)]
     pub fn lexicographically_largest(&self) -> Choice {
         // If this element's c1 coefficient is lexicographically largest
         // then it is lexicographically largest. Otherwise, in the event
